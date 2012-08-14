@@ -2,7 +2,7 @@
 While this script is about the same length as the original, it shows several
 of Oort's features in action, although its advantages here are less clear.
 Try uncommenting some of the lines below, or testing out choral.py, 
-fractal.py, or gallop.py for some particularly Oortish techniques."""
+fractal.py, or gallop.py for some particularly Oortian techniques."""
 
 from oort import *
 from random import random as random_percent, choice
