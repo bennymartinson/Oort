@@ -1,3 +1,7 @@
+""" The busses module allows for introspection and control over RTcmix busses.
+
+While still very incomplete, you can use this module to inspect bus configuration, and temporarily clear off a bus."""
+
 import rtcmix_import as rtcmix
 from oort.rtcmix_import.commands import current_bus_config
 import errors

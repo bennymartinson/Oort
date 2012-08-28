@@ -43,7 +43,7 @@ def play_synth():
           min_control_rate = 20000, # need high control rate for short synth notes
           wavetable = maketable("wave", 10000, 1, .9, .7, .5, .3, .2, .1, .05, .02))
     
-    while current_time() < totdur:
+    while now() < totdur:
         w.pitch = cpsoct(octpch(choice(notes)) + octpch(transposition))
         w.pan = random_percent()
         w.play()

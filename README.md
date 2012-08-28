@@ -1,23 +1,30 @@
 Oort
 ====
 
-An object-oriented wrapper for the RTcmix language
+An object-oriented wrapper for the [RTcmix](http://rtcmix.org/) language in Python
 
 OVERVIEW
 ------
+Oort is a library designed to help you write powerful, expressive Python code to interface with RTcmix.  It is built entirely on top of the RTcmix library, and is run with the [PYCMIX](http://music.columbia.edu/cmc/RTcmix/use/python.html) executable.
+
 Oort wraps RTcmix's instruments into classes of the same name.  This allows Oort (and you!) to easily extend the behavior of instruments with minimal intrusion into the syntax of the RTcmix language.  In fact, any python code using the 'rtcmix' library should work equally well using the 'oort' library.
 
 However, Oort offers a number of features which allow you to work with RTcmix a bit differently, if you so choose:
 
 <h4>Syntax features</h4>
-Oort offers a number of small, but handy features designed to make your RTcmix experience a little smoother.  Designed specifically for the Eclipse PyDev environment, Oort is built to help whatever IDE you use with code completion.  
+Oort offers a number of small, but handy features designed to make your RTcmix experience a little smoother.  While it was built specifically for the Eclipse PyDev environment, Oort is designed to help whatever IDE you use with code completion and debugging.
 
-Other features include:
+Features include:
 * Lazy loading automatically loads instruments the first time they are using, meaning calling load() before your instrument call is optional in Oort.
 * Parameters can be entered as either a list of arguments or a list of keyword-argument pairs, or both in the manner Python allows.  For example:
   <pre>NOISE(outsk=0, dur=1, amp=5000, pan=0.5)</pre>
+  If you need to know the names of the parameters, you can pull up the internal documentation
+  <pre>help(NOISE)</pre>
+  Or, to pull up the RTcmix docs online, just call the following in your script or on the PYCMIX or Python [REPL](http://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop):
+  <pre>docs(NOISE)</pre>
 * Each instrument has a number of default values for its parameters including outskip (see Oortian timing below), inskip, pitch, amp, and pan.  This means you can call an instrument with only the parameters you find relevant, for example:
   <pre>NOISE(amp=5000, pan=0.)</pre>
+* Oort code will run silently if you run it with python instead of PYCMIX.  This way, you can debug your code in a Python IDE, and a "dummy" RTcmix library will be loaded to keep it from throwing errors.
 
 <h4>Object-oriented features</h4>
 Since a call to an Oort instrument actually instantiates an object, you can assign this object to a variable, change parameters, and play it any number of times.  For example, as well as doing this:
@@ -80,8 +87,8 @@ for _ in xrange(20):
   w.play()
 </pre>
 
-<h4>Animations</h4>
-Animations are as-of-yet underdeveloped but still very useful objects.  An Animation can be provided as an instrument or object parameter anywhere a float is expected.  These objects allow the programmer to set up values that change over time, such as ramps or shapes, which are defined by an RTcmix table.
+<h4>Dynamic Values</h4>
+Dynamic Values are as-of-yet underdeveloped but still very useful objects.  A dynamic value can be provided as an instrument or object parameter anywhere a float is expected.  These objects allow the programmer to set up values that change over time, such as ramps or shapes, which are defined by an RTcmix table.
 
 For example, here's a fade-in:
 <pre>
@@ -95,11 +102,8 @@ while current_time() &lt; 10:
   w.play()
 </pre>
 
-
-QUICKSTART
-------
-For a quickstart tutorial on using Oort, refer to the quickstart files in docs/quickstart/.
-
+<h4>More</h4>
+Oort offers several other smaller features, from bus management to RTcmix introspection to custom (composite) instruments. Most of these features are still undocumented, and many more features are planned for future releases.
 
 INSTALLATION
 ------
@@ -113,10 +117,13 @@ USAGE
 ------
 The 'oort' library can be used in python scripts in the same way the 'rtcmix' library is used.  Just import the library like so: 
 <pre>import oort</pre>
-and the entire RTcmix library–and all of Oort's extra functionality–are loaded into your script  Oort projects are also run the same way, using PYCMIX:
+and the entire RTcmix library–and all of Oort's extra functionality–are loaded into your script! Oort projects are also run the same way, using PYCMIX:
 <pre>PYCMIX &lt; sample.py</pre>
 If you don't have PYCMIX installed, http://rtcmix.org/ can tell you how to build it.
 
+QUICKSTART
+------
+For a quickstart tutorial on using Oort, refer to the quickstart files in docs/quickstart/.
 
 THANKS
 ------

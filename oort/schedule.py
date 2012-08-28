@@ -1,4 +1,5 @@
 import threading
+from errors import OortScheduleError
 
 class _Schedule:
     registry = None
@@ -11,7 +12,7 @@ class _Schedule:
     def _get_lock(self, dur):
         """Create a lock and register it"""
         lock = threading.Lock()
-        self.registry.append((self.time+dur, lock))
+        self.registry.append((max(self.time+dur,0), lock))
         self.registry.sort()
         lock.acquire()
         return lock
@@ -65,11 +66,11 @@ class _Schedule:
         print '_____________________________'
         print 'Oort processing completed.'
         print 'Total instrument plays:', total_instrument_plays
-        print 'End time:', current_time()
+        print 'End time:', now()
 
 _schedule = _Schedule()
 
-def current_time():
+def now():
     return _schedule.time
 
 def wait(dur):
@@ -78,6 +79,8 @@ def wait(dur):
     lock.acquire()
 
 def sprout(function, *args, **kwargs):
+    if not hasattr(function, '__call__'):
+        raise OortScheduleError('The variable passed in to sprout was not a function.')
     lock = _schedule._get_lock(0)
     args = lock,function,args
     th = threading.Thread(target=_schedule._sprouted_function, args=args, kwargs=kwargs)

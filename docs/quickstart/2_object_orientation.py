@@ -9,7 +9,7 @@ from oort import *
 # Running an oort instrument wrapper as a function works exactly like
 # standard PYCMIX:
 
-bowvelenv = maketable("line", 'nonorm', 1000, 0,0., 1,0.5, 9,0.5, 10,0)
+bvenv = maketable("line", 'nonorm', 1000, 0,0., 1,0.5, 9,0.5, 10,0)
 bowpressenv = 1.
 bowposenv = 0.75
 vibwave = maketable("wave", 1000, "sine")

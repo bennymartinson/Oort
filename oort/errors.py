@@ -7,5 +7,8 @@ class OortInstrumentError(OortError):
 class OortBehaviorError(OortError):
     pass
 
+class OortScheduleError(OortError):
+    pass
+
 class OortBusError(OortError):
     pass

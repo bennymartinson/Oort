@@ -4,17 +4,18 @@ from oort import *
 control_rate(15000)
 print_off()
 
-# Oort offers an alternative, wait-based approach to timing inspired by 
-# languages like ChucK and Common Music.  Oort's schedule module uses a 
-# system of threads and locks which reorganizes the operation of your code
-# into a chronological sequence.  This simulates threads running and waiting
-# in real-time, but it executes in an instant!
+# Oort offers an alternative, wait-based approach to timing inspired by, 
+# but departing from languages like ChucK and Common Music.  Oort's schedule 
+# module uses a system of threads and locks which reorganizes the operation 
+# of your code into a chronological sequence.  This simulates threads 
+# running and waiting in real-time, but it executes in an instant!
 
-# This is done using a moment cursor. Oort instruments automatically read
-# from this cursor if no outskip is specified.  To get the moment cursor at 
-# any time, call the current_time() function:
+# This is done using an internal moment cursor, which holds the time that is
+# "now" in the script. Oort instruments automatically read from this cursor 
+# if no outskip is specified.  To get the moment cursor at  any time, call 
+# the now() function:
 
-print "time at beginning:", current_time()
+print "time at beginning:", now()
 
 # to wait, just call wait(dur), where dur is the duration to wait in 
 # seconds.
@@ -54,7 +55,7 @@ sprout(loop, dur=0.5, pan=0.7)
 
 # Even though we've sprouted these processes which do a lot of waiting, our
 # time outside these processes is still 0.  See:
-print 'Time after sprouting loops:', current_time()
+print 'Time after sprouting loops:', now()
 
 # Now, the coolest thing about working with code that is processed 
 # chronologically is you can now control different musical aspects or ideas

@@ -37,7 +37,7 @@ class Humanize(abstract.Behavior):
         import random
         while True:
             variance = random.uniform(-self.time_variance, self.time_variance)
-            if schedule.current_time() >= -variance: break
+            if schedule.now() >= -variance: break
         outsk = fn() + variance
         return outsk
     

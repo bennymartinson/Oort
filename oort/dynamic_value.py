@@ -1,10 +1,10 @@
 import schedule
 import rtcmix_import.commands as rtcmix
 
-class Animation(object):
-    """An animation is a value that changes over Oort time.
+class DynamicValue(object):
+    """A dynamic value is a value that changes over Oort time.
     
-    It's value can be polled, or an Animation object can be passed into an instrument
+    It's value can be polled, or a dynamic value object can be passed into an instrument
     as a parameter, and the instrument will do the dirty work."""
     
     is_non_negative=None
@@ -15,11 +15,11 @@ class Animation(object):
         self.max=maxval
         self.dur=dur
         self.table=table
-        self.start_time=schedule.current_time()
+        self.start_time=schedule.now()
         self.loop=loop
     
     def value(self):
-        cur_time = schedule.current_time()
+        cur_time = schedule.now()
         if cur_time >= self.start_time + self.dur:
             if not self.loop:
                 return self.end_val
@@ -44,19 +44,19 @@ class Animation(object):
                     break
         return self.is_non_negative
         
-class Ramp(Animation):
+class Ramp(DynamicValue):
     start_val=0.
     end_val=1.
     dur=10
     start_time=None
     def __init__(self, start_val=0., end_val=1., dur=10):
-        self.start_time = schedule.current_time()
+        self.start_time = schedule.now()
         self.start_val = start_val
         self.end_val = end_val
         self.dur = dur
     
     def value(self):
-        cur_time = schedule.current_time()
+        cur_time = schedule.now()
         if cur_time < self.start_time:
             return self.start_val
         elif cur_time >= self.start_time + self.dur:

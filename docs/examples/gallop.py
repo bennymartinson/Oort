@@ -1,6 +1,6 @@
-"""A script highlighting Oort's Animation object.
+"""A script highlighting Oort's DynamicValue object.
 
-An Animation object controls values over time according to a user-specified
+A DynamicValue object controls values over time according to a user-specified
 table."""
 
 from oort import *
@@ -17,12 +17,12 @@ def scale():
               Humanize(time_variance=Ramp(0., 0.01, 30)),
               ADSR(0.01, 0.1, 0.3, 0.1)
               )
-    b.pitch = Animation(minval=440, 
+    b.pitch = DynamicValue(minval=440, 
                 maxval=880, 
                 dur=5, 
                 table=maketable('line',25 ,0,0, 1,1, 2,0),
                 loop=True)
-    b.amp = Animation(minval=0., 
+    b.amp = DynamicValue(minval=0., 
                 maxval=5000., 
                 dur=7, 
                 table=maketable('line',25 ,0,0, 1,1, 2,0),

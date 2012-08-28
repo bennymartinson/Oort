@@ -1,4 +1,5 @@
-""" A recursive algorithm which creates a sort of sonic fractal."""
+""" A recursive algorithm which sprouts a process within itself.
+This creates a sort of sonic fractal."""
 
 from oort import *
 control_rate(20000)

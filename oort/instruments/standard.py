@@ -31,10 +31,17 @@ class FMINST(Instrument):
     def __init__(self, outsk=None, dur=None, amp=None, carfreq=None, modfreq=None, lowindex=None, highindex=None, pan=None, wavetable=None, indexenv=None, *extra_args, **extra_kwargs):
         self._passback(locals())
 class GRANSYNTH(Instrument):
-    """GRANSYNTH(outsk, dur, AMP, WAVETABLE, GRAINENV, GRAINHOP, OUTTIMEJITTER, MINDUR, MAXDUR, MINAMP, MAXAMP, PITCH[, TRANSPTABLE, PITCHJITTER, seed, MINPAN, MAXPAN])"""
+    """GRANSYNTH(outsk, dur, AMP, WAVETABLE, GRAINENV, GRAINHOP, OUTTIMEJITTER, MINDUR, MAXDUR, MINAMP, MAXAMP, PITCH[, TRANSPTABLE, PITCHJITTER, seed, MI
+, MAXPAN])"""
     instrument = "GRANSYNTH"
     pfields = 'amp', 'wavetable', 'grainenv', 'grainhop', 'outtimejitter', 'mindur', 'maxdur', 'minamp', 'maxamp', 'pitch', 'transptable', 'pitchjitter', 'minpan', 'maxpan'
     def __init__(self, outsk=None, dur=None, amp=None, wavetable=None, grainenv=None, grainhop=None, outtimejitter=None, mindur=None, maxdur=None, minamp=None, maxamp=None, pitch=None, transtable=None, pitchjitter=None, seed=None, minpan=None, maxpan=None, *extra_args, **extra_kwargs):
+        self._passback(locals())
+class HALFWAVE(Instrument):
+    """HALFWAVE(outsk, dur, PITCH, AMP, FIRSTHALF, SECONDHALF, WMIDPOINT[, PAN])"""
+    instrument = "HALFWAVE"
+    pfields = 'pitch', 'amp', 'firsthalf', 'secondhalf', 'wmidpoint', 'pan'
+    def __init__(self, outsk=None, dur=None, pitch=None, amp=None, firsthalf=None, secondhalf=None, wmidpoint=None, pan=None):
         self._passback(locals())
 class JGRAN(Instrument):
     """JGRAN(outsk, dur, AMP, seed, osctype, phaserandom, GRAINENV, GRAINWAVE, MODFREQMULT, MODINDEX, MINFREQ, MAXFREQ, MINSPEED, MAXSPEED, MININTENSITY, MAXINTENSITY, DENSITY[, PAN, PANRANDOM])"""
@@ -168,6 +175,13 @@ class MSITAR(Instrument):
     pfields = 'amp', 'freq', 'pan', 'ampenv'
     def __init__(self, outsk=None, dur=None, amp=None, pitch=None, plamp=None, pan=None, ampenv=None, *extra_args, **extra_kwargs):
         self._passback(locals())
+class MULTIWAVE(Instrument):
+    """MULTIWAVE(outsk, dur, AMP, WAVETABLE, FREQ1, AMP1, phase1, PAN1, ... FREQN, AMPN, phaseN, PANN)"""
+    instrument = "MULTIWAVE"
+    pfields = 'amp', 'wavetable'
+    kw_pattern = 'freq', 'amp', 'phase', 'pan'
+    def __init__(self, outsk=None, dur=None, amp=None, wavetable=None, *extra_args, **extra_kwargs):
+        self._passback(locals())
 class NOISE(Instrument):
     """NOISE(outsk, dur, AMP[, PAN])"""
     instrument = "NOISE"
@@ -180,6 +194,18 @@ class SCULPT(Instrument):
     pfields = ()
     def __init__(self, outsk=None, segmentdur=None, amp=None, nsegments=None, pan=None, *extra_args, **extra_kwargs):
         self._passback(locals())
+class SGRANR(Instrument):
+    """SGRANR(outsk, dur, amp, rate, p4-7: ratevar, p8-11: duration, p12-15: location, p16-19: transposition[, grainlayers (not used), seed])"""
+    instrument = "SGRANR"
+    pfields = ()
+    def __init__(self, outsk=None, dur=None, amp=None, rate=None, *extra_args, **extra_kwargs):
+        self._passback(locals()) 
+class SYNC(Instrument):
+    """SYNC(outsk, dur, PITCH, AMP, OSCFREQ, OSCWAVE[, PAN])"""
+    instrument = "SYNC"
+    pfields = 'pitch', 'amp', 'oscfreq', 'oscwave', 'pan'
+    def __init__(self, outsk=None, dur=None, pitch=None, amp=None, oscfreq=None, oscwave=None, pan=None, *extra_args, **extra_kwargs):
+        self._passback(locals()) 
 class START(Instrument):
     funddecay=1.
     nyqdecay=0.1
@@ -285,6 +311,12 @@ class COMBIT(Effect):
     pfields = 'amp','freq','reverbtime','pan'
     def __init__(self, outsk=None, insk=None, dur=None, amp=None, pitch=None, reverbtime=None, inputchan=None, pan=None, ringdowndur=None, *extra_args, **extra_kwargs):
         self._passback(locals())
+class COMPLIMIT(Effect):
+    """COMPLIMIT(outsk, insk, dur, PREAMP, POSTAMP, ATTACK, RELEASE, THRESHOLD, COMPRESSRATIO, lookahead, windowsize[, DETECTIONTYPE, BYPASS, INPUTCHAN, PAN])"""
+    instrument = "COMPLIMIT"
+    pfields = 'preamp','postamp','attack','release', 'threshold', 'compressratio', 'detectiontype', 'bypass', 'inputchan', 'pan'
+    def __init__(self, outsk=None, insk=None, dur=None, preamp=None, postamp=None, attack=None, release=None, threshold=None, compressratio=None, lookahead=None, windowsize=None, detectiontype=None, bypass=None, inputchan=None, pan=None, *extra_args, **extra_kwargs):
+        self._passback(locals())
 class CONVOLVE1(Effect):
     """CONVOLVE1(outsk, insk, dur, AMP, IMPULSETABLE, impstart, impudur, impamp, WINDOWTABLE, AMTWET, inputchan, PAN)"""
     instrument = "CONVOLVE1"
@@ -344,11 +376,25 @@ class EQ(Effect):
     pfields = 'amp', 'eqtype', 'pan', 'bypass', 'filtfreq', 'filtq', 'filtamp'
     def __init__(self, outsk=None, insk=None, dur=None, amp=None, eqtype=None, inputchan=None, pan=None, bypass=None, filtfreq=None, filtq=None, filtamp=None, *extra_args, **extra_kwargs):
         self._passback(locals())
+class FILTERBANK(Effect):
+    """FILTERBANK(outsk, insk, dur, AMP, ringdowndur, inputchan, PAN, CFREQ1, BANDWIDTH1, RELAMP1, ... CFREQN, BANDWITHN, RELAMPN)"""
+    instrument = "FILTERBANK"
+    pfields = 'amp', 'pan'
+    kw_pattern = 'cfreq', 'bandwidth', 'relamp'
+    def __init__(self, outsk=None, insk=None, dur=None, amp=None, ringdowndur=None, inputchan=None, pan=None, *extra_args, **extra_kwargs):
+        self._passback(locals())
 class FILTSWEEP(Effect):
     """FILTSWEEP(outsk, insk, dur, AMP, ringdowndur, steepness, ampbalance, inputchan, PAN, BYPASS, CENTERFREQENV, BANDWIDTHENV)"""
     instrument = "FILTSWEEP"
     pfields = 'amp', 'pan', 'bypass', 'centerfreqenv', 'bandwidthenv'
     def __init__(self, outsk=None, insk=None, dur=None, amp=None, ringdowndur=None, steepness=None, ampbalance=None, inputchan=None, pan=None, bypass=None, centerfreqenv=None, bandwidthenv=None, *extra_args, **extra_kwargs):
+        self._passback(locals())
+class FIR(Effect):
+    """FIR(outsk, insk, dur, AMP, ncoefficients, coefficients...)"""
+    instrument = "FIR"
+    pfields = 'amp'
+    kw_pattern = 'coefficient'
+    def __init__(self, outsk=None, insk=None, amp=None, ncoefficients=None):
         self._passback(locals())
 class FLANGE(Effect):
     """FLANGE(outsk, insk, dur, AMP, RESONANCE, maxdelay, MODDEPTH, MODRATE, SIGNALMIX[, FLANGETYPE, inputchan, PAN, ringdowndur, MODWAVETABLE])"""
@@ -386,6 +432,12 @@ class GRANULATE(Effect):
     pfields = 'insk', 'amp', 'inputtable', 'intablechan', 'instart', 'inend', 'wraparound', 'traverserate', 'grainenv', 'grainhop', 'intimejitter', 'outtimejitter', 'mindur', 'maxdur', 'minamp', 'maxamp', 'pitch', 'transptable', 'pitchjitter', 'minpan', 'maxpan', 'interptype'
     def __init__(self, outsk=None, insk=None, dur=None, amp=None, inputtable=None, inchans=None, intablechan=None, instart=None, inend=None, wraparound=None, traverserate=None, grainenv=None, grainhop=None, intimejitter=None, outtimejitter=None, mindur=None, maxdur=None, minamp=None, maxamp=None, pitch=None, transptable=None, pitchjitter=None, seed=None, minpan=None, maxpan=None, interptype=None, *extra_args, **extra_kwargs):
         self._passback(locals())
+class GVERB(Effect):
+    """GVERB(outsk, insk, dur, AMP, ROOMSIZE, RVBTIME, DAMPING, BANDWIDTH, DRYLEVEL, EARLYREFLECT, RVBTAIL, RINGDOWN[, INCHAN])"""
+    instrument = "GVERB"
+    pfields = 'amp', 'roomsize', 'rvbtime', 'damping', 'bandwidth', 'drylevel', 'earlyreflect', 'rvbtail', 'ringdown', 'inchan'
+    def __init__(self, outsk=None, insk=None, dur=None, amp=None, roomsize=None, rvbtime=None, damping=None, bandwidth=None, drylevel=None, earlyreflect=None, rvbtail=None, ringdown=None, inchan=None):
+        self._passback(locals())
 class HOLO(Effect):
     """HOLO(outsk, insk, dur, AMP, XTALKMULT)"""
     instrument = "HOLO"
@@ -395,8 +447,15 @@ class HOLO(Effect):
 class INPUTSIG(Effect):
     """INPUTSIG(outsk, insk, dur, AMP[, inputchan, PAN])"""
     instrument = "INPUTSIG"
+    pfields = 'amp', 'pan'
     def __init__(self, outsk=None, insk=None, dur=None, AMP=None, inputchan=None, PAN=None, *extra_args, **extra_kwargs):
         self._passback(locals())
+class JCHOR(Effect):
+    """JCHOR(outsk, insk, dur, indur, inmaintain, pitch, nvoices, MINAMP, MAXAMP, MINWAIT, MAXWAIT, seed, inputchan, AMPENV, GRAINENV)"""
+    instrument = "JCHOR"
+    pfields = 'minamp', 'maxamp', 'minwait', 'maxwait', 'ampenv', 'grainenv'
+    def __init__(self, outsk=None, insk=None, dur=None, indur=None, inmaintain=None, pitch=None, nvoices=None, minamp=None, maxamp=None, minwait=None, maxwait=None, seed=None, inputchan=None, ampenv=None, grainenv=None, *extra_args, **extra_kwargs):
+        self._passback(locals()) 
 class JDELAY(Effect):
     """JDELAY(outsk, insk, dur, AMP, DELAYTIME, FEEDBACK, ringdowndur, FILTFREQ, SIGMIX[, inputchan, PAN, prefadesend, dcblock])"""
     instrument = "JDELAY"
@@ -418,6 +477,7 @@ class MIX(Effect):
     """MIX(outsk, insk, dur, AMP, p4-n: output channel assigns)"""
     instrument = "MIX"
     pfields = 'amp',
+    load = ()
     def __init__(self, outsk=None, insk=None, dur=None, amp=None, *extra_args, **extra_kwargs):
         self._passback(locals())
 
@@ -462,12 +522,31 @@ class MULTICOMB(Effect):
     pfields = 'amp', 'reverbtime'
     def __init__(self, outsk=None, insk=None, dur=None, amp=None, combfreqlo=None, combfreqhi=None, reverbtime=None, inputchan=None, ringdowndur=None, *extra_args, **extra_kwargs):
         self._passback(locals())
+class MULTEQ(Effect):
+    """MULTEQ(outsk, insk, dur, AMP, MASTERBYPASS, EQTYPE1, FILTFREQ1, FILTQ1, FILTAMP1, FILTBYPASS1, ... EQTYPEN, FILTFREQN, FILTQN, FILTAMPN, FILTBYPASSN)"""
+    instrument = "MULTEQ"
+    pfields = 'amp', 'masterbypass'
+    kw_pattern = 'eqtype', 'filtfreq', 'filtq', 'filtamp', 'filtbypass'
+    def __init__(self, outsk=None, insk=None, dur=None, amp=None, masterbypass=None, eqtype1=None, filtfreq1=None, filtq1=None, filtamp1=None, filtbypass1=None, *extra_args, **extra_kwargs):
+        self._passback(locals()) 
+class NPAN(Effect):
+    """NPAN(outsk, insk, dur, AMP, mode, ANGLE/XLOC, DISTANCE/YLOC[, inputchan])"""
+    instrument = "NPAN"
+    pfields = 'amp', 'angle', 'distance'
+    def __init__(self, outsk=None, insk=None, dur=None, amp=None, mode=None, angle=None, distance=None, inputchan=None, *extra_args, **extra_kwargs):
+        self._passback(locals()) 
 class PAN(Effect):
     """PAN(outsk, insk, dur, amp[, inputchan, panmode, panenv])"""
     instrument = "PAN"
     pfields = 'amp', 'panmode', 'panenv'
     def __init__(self, outsk=None, insk=None, dur=None, amp=None, inputchan=None, panmode=None, panenv=None, *extra_args, **extra_kwargs):
         self._passback(locals())
+class PANECHO(Effect):
+    """PANECHO(outsk, insk, dur, AMP, CHAN_0_DELAY, CHAN_1_DELAY, FEEDBACK, ringdowndur[, inputchan])"""
+    instrument = "PANECHO"
+    pfields = 'amp', 'chan_0_delay', 'chan_1_delay', 'feedback'
+    def __init__(self, outsk=None, insk=None, dur=None, amp=None, chan_0_delay=None, chan_1_delay=None, feedback=None, ringdowndur=None, inputchan=None, *extra_args, **extra_kwargs):
+        self._passback(locals()) 
 class PLACE(Effect):
     """PLACE(outskip, inskip, dur, AMP, dist-xpos, angle-ypos, (-)dist_between_mikes, reverb_amp[, input_channel)"""
     instrument = "PLACE"
@@ -546,6 +625,13 @@ class SPECTEQ2(Effect):
     pfields = 'amp', 'windowtable', 'eqtable', 'minfreq', 'maxfreq', 'bypass', 'pan'
     def __init__(self, outsk=None, insk=None, dur=None, amp=None, fftsize=None, windowsize=None, windowtable=None, overlap=None, eqtable=None, minfreq=None, maxfreq=None, bypass=None, inputchan=None, pan=None, *extra_args, **extra_kwargs):
         self._passback(locals())
+class SPLITTER(Effect):
+    """SPLITTER(outsk, insk, dur, GLOBAL_AMP, input_channel, OUTCHAN0_AMP, OUTCHAN1_AMP, ...)"""
+    instrument = "SPLITTER"
+    pfields = 'global_amp'
+    kw_pattern = 'outchan_amp'
+    def __init__(self, outsk=None, insk=None, dur=None, global_amp=None, input_channel=None, *extra_args, **extra_kwargs):
+        self._passback(locals()) 
 class SROOM(Effect):
     """SROOM(outsk, insk, dur, amp, rightdist, frontdist, xloc, yloc, rvbtime, reflect, inroomwidth[, inputchan])"""
     instrument = "SROOM"
@@ -558,6 +644,11 @@ class STEREO(Effect):
     pfields = 'amp'
     def __init__(self, outsk=None, insk=None, dur=None, amp=None, *extra_args, **extra_kwargs):
         self._passback(locals())
+class STGRANR(Effect):
+    instrument = "STGRANR"
+    pfields = ()
+    def __init__(self, outsk=None, insk=None, dur=None, amp=None, rate=None, *extra_args, **extra_kwargs):
+        self._passback(locals()) 
 class TRANS(Effect):
     """TRANS(outsk, insk, dur, AMP, TRANSP[, inputchan, PAN])"""
     instrument = "TRANS"
@@ -582,3 +673,21 @@ class TVSPECTACLE(Effect):
     pfields = ()
     def __init__(self, outsk=None, insk=None, dur=None, amp=None, ringdowndur=None, fftsize=None, windowsize=None, windowtype=None, overlap=None, sigmix=None, inputchan=None, pan=None, *extra_args, **extra_kwargs):
         self._passback(locals())
+class VOCODE2(Effect):
+    """VOCODE2(outsk, insk, dur, AMP, nfilts, CFREQLO_FTABLETRANSP, CFREQMULT_FILTMULT, transp, filtbw[, filtresponse, hisigmix, hifreq, NOISEAMP, noiserate, PAN, CFREQTABLE])"""
+    instrument = "VOCODE2"
+    pfields = 'cfreqlo_ftabletransp', 'cfreqmult_filtmult', 'noiseamp', 'pan', 'cfreqtable'
+    def __init__(self, outsk=None, insk=None, dur=None, amp=None, nfilts=None, cfreqlo_ftabletransp=None, cfreqmult_filtmult=None, transp=None, filtbw=None, filtresponse=None, hisigmix=None, hifreq=None, noiseamp=None, noiserate=None, pan=None, cfreqtable=None, *extra_args, **extra_kwargs):
+        self._passback(locals()) 
+class VOCODE3(Effect):
+    """VOCODE3(outsk, insk, dur, AMP, MODCFREQS, CARCFREQS, BANDMAP, CAMPSCALE, MODCFTRANSP, CARCFTRANSP, MODFILTQ, CARFILTQ[, FILTRESPONSE, HOLD, PAN])"""
+    instrument = "VOCODE3"
+    pfields = 'amp', 'modcfreqs', 'carcfreqs', 'bandmap', 'campscale', 'modcftransp', 'carcftrasp', 'modfiltq', 'carfiltq', 'filtresponse', 'hold', 'pan'
+    def __init__(self, outsk=None, insk=None, dur=None, amp=None, modcfreqs=None, carcfreqs=None, bandmap=None, campscale=None, modcftransp=None, carcftransp=None, modfiltq=None, carfiltq=None, filtresponse=None, hold=None, pan=None, *extra_args, **extra_kwargs):
+        self._passback(locals()) 
+class VOCODESYNTH(Effect):
+    """VOCODESYNTH(outsk, insk, dur, AMP, nfilts, CFREQLO/FTABLETRANSP, CFREQMULT/FTABLEFORMAT, transp, filtbw, windowsize, smoothness, threshold, attack}, release, hisigmix, hifreq, inputchan, PAN, WAVETABLE[, SCALINGTABLE, CFREQTABLE])"""
+    instrument = "VOCODESYNTH"
+    pfields = 'amp', 'cfreqlo_ftabletransp', 'cfreqmult_ftableformat', 'pan', 'wavetable', 'scalingtable', 'cfreqtable'
+    def __init__(self, outsk=None, insk=None, dur=None, amp=None, nfilts=None, cfreqlo_ftabletransp=None, cfreqmult_ftableformat=None, transp=None, filtbw=None, windowsize=None, smoothness=None, threshold=None, attack=None, release=None, hisigmix=None, hifreq=None, inputchan=None, pan=None, wavetable=None, scalingtable=None, cfreqtable=None, *extra_args, **extra_kwargs):
+        self._passback(locals()) 

@@ -37,7 +37,7 @@ bwg.apply_behaviors(portamento, adsr)
 
 
 def play():
-    while current_time() < 15:
+    while now() < 15:
         bwg.pitch = cpsmidi(choice([2,9,12,17,23,28,31])+60)
         dur = uniform(0.2,0.4)
         bwg.dur = dur
@@ -57,14 +57,15 @@ wait(10)
 bell = RISSETBELL()
 bell.dur=3
 
-# Let's fade the bells in over time using an Oort Ramp Animation object.
-# Animations return different numbers over time according to an internal 
-# function, and can be substituted for floats in instruments and behaviors.
+# Let's fade the bells in over time using an Oort Ramp DynamicValue object.
+# Dynamic values return different numbers over time according to an internal 
+# RTcmix table, and can be substituted for floats in arguments to 
+# instruments and behaviors.
 
 bell.amp = Ramp(start_val=0, end_val=10000, dur=5)
 
 def bells():
-    while current_time() < 35:
+    while now() < 35:
         bell.pitch = cpsmidi(choice([2,9,12,17,23,28,31])+choice([60,72]))
         bell.play()
         wait(0.1)

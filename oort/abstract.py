@@ -1,15 +1,15 @@
 import schedule
 import rtcmix_import as rtcmix
 #from utilities import *
-import animation
+import dynamic_value
 import errors
 
 class OortObject(object):
     """Abstract base class for all Oort instruments and behaviors."""
     def __getattribute__(self, *args, **kwargs):
-        """When an animation object is accessed, return its number value instead."""
+        """When a dynamic value object is accessed, return its number value instead."""
         attr = object.__getattribute__(self, *args, **kwargs)
-        if isinstance(attr, animation.Animation):
+        if isinstance(attr, dynamic_value.DynamicValue):
             return attr.value()
         else:
             return attr
@@ -35,10 +35,6 @@ class Instrument(OortObject):
         argnames = spec[0]
         extra_args = spec[1] # the name of the list
         extra_kwargs = spec[2] # the name of the dict
-        if extra_args is not None:
-            argnames.append(extra_args)
-        if extra_kwargs is not None:
-            argnames.append(extra_kwargs)
         play = False
         
         for argname in argnames:
@@ -51,6 +47,19 @@ class Instrument(OortObject):
                 setattr(self, key, args[argname])
             elif not hasattr(self, key):
                 setattr(self, key, None)
+        
+        if extra_args is not None:
+            
+            argcount = len(argnames)
+            i = 0
+            for arg in args[extra_args]:
+                play = True
+                setattr(self, 'p'+str(argcount-1+i), arg)
+                i+=1
+        if extra_kwargs is not None:
+            for key, arg in args[extra_kwargs].items():
+                play = True
+                setattr(self, key, arg)
         
         if play: # if at least one argument was passed to the constructor
             self.play()
@@ -75,7 +84,7 @@ class Instrument(OortObject):
             return getattr(self, name)
     
     def get_outsk(self):
-        return self.outsk + schedule.current_time()
+        return self.outsk + schedule.now()
     
     def apply_behaviors(self, *behaviors):
         for behavior in behaviors:
@@ -176,15 +185,37 @@ class Instrument(OortObject):
             args.append(arg)
             keys.append(argname)
         
-        if hasattr(self, 'extra_args'):
-            for arg in self.extra_args:
-                keys.append('p'+str(len(args)+1)) # just default to calling it p4, p5, etc.
-                args.append(arg)
+        # Look for pN parameters
+        i=1
+        repeat = True
+        while repeat:
+            name = 'p'+str(i)
+            if hasattr(self, name) and i <= len(args):
+                if i<len(keys):
+                    args[i] = getattr(self, name)
+                else:
+                    keys.append(name)
+                    args.append(getattr(self, name))
+            elif i > len(args): 
+                repeat = False
+                break
+            i+=1
         
-        if hasattr(self, 'extra_kwargs'):
-            for k,v in self.extra_kwargs.items():
-                keys.append(k)
-                args.append(v)
+        # Look for parameters following kw_pattern
+        if hasattr(self, 'kw_pattern'):
+            i=1
+            repeat = True
+            while repeat:
+                for prefix in self.kw_pattern:
+                    name = prefix+str(i)
+                    if hasattr(self, name):
+                        keys.append(name)
+                        args.append(getattr(self, name))
+                    else: 
+                        repeat = False
+                        break
+                i+=1
+        
         return args, keys
     
     def _play(self, args, keys):
