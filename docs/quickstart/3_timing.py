@@ -43,7 +43,7 @@ def loop(dur, pan=0.5):
 # setting some variables:
 playing = True
 w = WAVETABLE()
-w.wavetable = maketable('wave', 1000,'buzz')
+w.wavetable = maketable('wave', 1000,'tri')
 w.amp = 10000 * maketable('expbrk', 1000, 1,999,0)
 
 # Now you can sprout this function as many times as you'd like, to get some
@@ -69,16 +69,31 @@ print 'Time after sprouting loops:', now()
 # internal wavetable:
 
 def change_wavetable():
-    wait(5)
-    w.wavetable = maketable('wave', 1000, 'tri')
+    wait(4)
+    w.wavetable = maketable('wave', 1000, 'buzz')
 
 sprout(change_wavetable)
 
+# Now, let's change the bus_config at t=10 seconds to route our wavetable
+# into some GVERB.  Again, notice that even though this is happening in a 
+# completely different part of the code, every wavetable after 10 seconds 
+# is routed into our spectral delay, since those are processed after the 
+# bus_config commands below.
 
-# You may have noticed that in the loop function above, the code is on an
+def apply_spectacle():
+    wait(10)
+    bus_config('WAVETABLE', 'aux 0-1 out')
+    bus_config('GVERB', 'aux 0-1 in', 'out 0-1')
+    
+    GVERB(dur=10, amp=0.5, roomsize=50, rvbtime=5, damping=0.5, 
+          bandwidth=0.5, drylevel=-10, earlyreflect=-11, rvbtail=-9, 
+          ringdown=5)
+sprout(apply_spectacle)
+
+# You may have noticed that in the "loop" function above, the code is on an
 # endless loop until the variable "playing" becomes False.  We'd better end
-# the loop at some point so your CPU doesn't melt..  Let's wait 10 seconds, 
+# the loop at some point so your CPU doesn't melt..  Let's wait 20 seconds, 
 # then stop the function above.
 
-wait(10)
+wait(20)
 playing = False

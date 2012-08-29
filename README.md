@@ -40,7 +40,7 @@ n.play()
 </pre>
 
 <h4>Oortian timing</h4>
-Oort allows you to work with a chronological timing paradigm if you so choose.  This works in a way that emulates languages like ChucK that sprout concurrent threads that wait and perform actions.
+Oort allows you to work with a chronological timing paradigm if you so choose.  This works in a way that (sort of) emulates languages like ChucK that sprout concurrent threads that wait and perform actions.
 
 Oort has its own wait() function that progresses time forward, and a sprout() function which creates a thread that controls its own clock. Since PYCMIX code is preprocessed, the wait() function controls the outskip of instrument calls, but does not physically wait any amount of time.
 
